@@ -6,9 +6,9 @@ import os
 app = Flask(__name__)
 def connect_to_mongodb():
    try:
-     uri_name = os.getenv("uri_name")
-     uri_pass = os.getenv("uri_pass")
-     project_details = os.getenv("project_details")
+     uri_name = os.environ.get('uri_name')
+     uri_pass = os.environ.get('uri_pass')
+     project_details = os.environ.get('project_details')
      client = MongoClient(uri_name + urllib.parse.quote(uri_pass) + project_details)
      print("Connected To MongoDB client successfully")
 
