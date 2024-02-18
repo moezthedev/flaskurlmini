@@ -2,10 +2,8 @@ from flask import Flask,render_template,jsonify,redirect,request
 from pymongo import MongoClient
 import urllib.parse
 import random
-from dotenv import load_dotenv
 import os
 app = Flask(__name__)
-load_dotenv()
 def connect_to_mongodb():
    try:
      uri_name = os.getenv("uri_name")
