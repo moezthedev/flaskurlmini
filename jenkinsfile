@@ -20,10 +20,20 @@ pipeline {
             steps {
                 // Execute some test steps, e.g., running unit tests
                 sh "echo Building Image via Docker Compose"
-                sh "export uri_name=${env.uri_name}"
-                echo "${env.uri_name}"
-                 sh "export uri_pass=${env.uri_pass}"
-                 sh "export project_details=${env.project_details}"
+                 withCredentials([usernamePassword(credentialsId:"uri_name",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
+                  sh "export ${uri_name}=${env.uri_name}"
+                
+                }
+              withCredentials([usernamePassword(credentialsId:"uri_pass",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
+                  sh "export ${uri_name}=${env.uri_pass}"
+                
+                }
+                 withCredentials([usernamePassword(credentialsId:"project_details",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
+                  sh "export ${uri_name}=${env.uri_pass}"
+                
+                }
+                
+                
                  sh "docker-compose up -d"
             }
         }
