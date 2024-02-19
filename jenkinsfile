@@ -31,7 +31,7 @@ pipeline {
                 // Deploy the application, e.g., to a server
                 
             
-                 sh "docker stop $(docker ps -q)"
+                sh "docker stop \$(docker ps -q)"
                  sh "docker run -p 8000:8000 -d flaskminiurl"
                 sh 'echo "Deploying..."'
             }
