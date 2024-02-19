@@ -23,7 +23,7 @@ pipeline {
                 sh "export uri_name=${env.uri_name}"
                  sh "export uri_pass=${env.uri_pass}"
                  sh "export project_details=${env.project_details}"
-                 sh "docker-compose up"
+                 sh "docker-compose up -d"
             }
         }
         stage('Deploy') {
