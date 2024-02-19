@@ -20,21 +20,12 @@ pipeline {
             steps {
                 // Execute some test steps, e.g., running unit tests
                 sh "echo Building Image via Docker Compose"
-                 withCredentials([usernamePassword(credentialsId:"uri_name",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
-                  sh "export ${uri_name}=${env.uri_name}"
-                
-                }
-              withCredentials([usernamePassword(credentialsId:"uri_pass",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
-                  sh "export ${uri_name}=${env.uri_pass}"
-                
-                }
-                 withCredentials([usernamePassword(credentialsId:"project_details",passwordVariable:"uri_pass",usernameVariable:"uri_name")]){
-                  sh "export ${uri_name}=${env.uri_pass}"
-                
-                }
+                sh 'echo "uri_name = "mongodb+srv://moizahsan07:"
+uri_pass = "XYIjYaim5k5zaCpH"
+project_details = "@urlminifier.cqmynvl.mongodb.net/?retryWrites=true&w=majority"" > .env'
                 
                 
-                 sh "docker build -t flaskminiurl ."
+                 sh "docker build -t flaskminiurl . "
             }
         }
         stage('Deploy') {
