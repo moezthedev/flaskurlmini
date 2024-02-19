@@ -34,7 +34,7 @@ pipeline {
                 }
                 
                 
-                 sh "docker build -t flaskminiurl"
+                 sh "docker build -t flaskminiurl ."
             }
         }
         stage('Deploy') {
