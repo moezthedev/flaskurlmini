@@ -6,14 +6,16 @@ pipeline {
         project_details = credentials('project_details')
     }
     stages {
-        stage('Build') {
+
+           stage('Cloning code from github') {
             steps {
                 // Execute some build steps, e.g., compiling code
-                sh 'echo "Building..."'
-                sh 'git clone https://github.com/moezthedev/flaskurlmini.git'
+                sh 'echo "cloning..."'
+                git url:"https://github.com/moezthedev/flaskurlmini.git", branch: "main"
 
             }
         }
+       
         stage('Building Image via Docker Compose') {
             steps {
                 // Execute some test steps, e.g., running unit tests
