@@ -40,8 +40,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Deploy the application, e.g., to a server
-                sh "docker stop flaskminiurl"
-                sh "docker rm flaskminiurl"
+                sh "docker stop  flaskurlmini_flaskapp "
+                sh "docker rm  flaskurlmini_flaskapp "
 
                  sh "docker run -p 8000:8000 -d flaskminiurl"
                 sh 'echo "Deploying..."'
