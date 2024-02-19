@@ -1,17 +1,27 @@
 pipeline {
     agent any
-    
+    environment {
+        uri_name = credentials('uri_name')
+        uri_pass = credentials('uri_pass')
+        project_details = credentials('project_details')
+    }
     stages {
         stage('Build') {
             steps {
                 // Execute some build steps, e.g., compiling code
                 sh 'echo "Building..."'
+                sh 'git clone https://github.com/moezthedev/flaskurlmini.git'
+
             }
         }
-        stage('Test') {
+        stage('Building Image via Docker Compose') {
             steps {
                 // Execute some test steps, e.g., running unit tests
-                sh 'echo "Testing..."'
+                sh "echo Building Image via Docker Compose"
+                sh "export uri_name=${env.uri_name}"
+                 sh "export uri_pass=${env.uri_pass}"
+                 sh "export project_details=${env.project_details}"
+                 sh "docker-compose up"
             }
         }
         stage('Deploy') {
