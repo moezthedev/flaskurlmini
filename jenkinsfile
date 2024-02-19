@@ -34,12 +34,13 @@ pipeline {
                 }
                 
                 
-                 sh "docker-compose up -d"
+                 sh "docker build -t flaskminiurl"
             }
         }
         stage('Deploy') {
             steps {
                 // Deploy the application, e.g., to a server
+                 sh "docker run -p 8000:8000 -d flaskminiurl"
                 sh 'echo "Deploying..."'
             }
         }
