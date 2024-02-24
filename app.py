@@ -9,14 +9,15 @@ def connect_to_mongodb():
      uri_name = os.environ.get('uri_name')
      uri_pass = os.environ.get('uri_pass')
      project_details = os.environ.get('project_details')
-     client = MongoClient(uri_name, username=urllib.parse.quote(uri_pass), password=project_details)
+     mongo_uri = os.environ.get('mongo_uri')
+     client = MongoClient(mongo_uri,connect=False)
      print("Connected To MongoDB client successfully")
-     print("Uriname"+uri_name)
+     
      
      return client
    except  Exception as e:
       print(e)
-      print("Uriname"+uri_name)
+      
       return "Error connecting MongoDB Client"
  
 @app.route('/', methods=['GET'])

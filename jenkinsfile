@@ -16,10 +16,10 @@ pipeline {
             }
         }
        
-        stage('Building Image via Docker Compose') {
+        stage('Building Image via Docker ') {
             steps {
                 // Execute some test steps, e.g., running unit tests
-                sh "echo Building Image via Docker Compose"
+                sh "echo Building Image via Docker"
                 
                 
                 
