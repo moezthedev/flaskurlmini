@@ -23,74 +23,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Check if container is running
+                // Check if any container is active
                 script {
-                    def isRunning = sh(script: "docker ps -q -f name=flaskminiurl", returnStatus: true)
-                    if (isRunning == 0) {
-                        echo "Container is running. Stopping it..."
-                        sh "docker stop flaskminiurl"
+                    def activeContainers = sh(script: "docker ps -q", returnStdout: true).trim()
+                    if (activeContainers) {
+                        echo "Stopping active container(s): ${activeContainers}"
+                        sh "docker stop ${activeContainers}"
                     } else {
-                        echo "Container is not running."
+                        echo "No active containers found."
                     }
                 }
 
                 // Run container from the latest image
-                sh "docker run -p 8000:8000 -d flaskminiurl"
-                sh 'echo "Deploying..."'
-            }
-        }
-    }
-    
-    post {
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
-        always {
-            echo 'Pipeline completed!'
-        }
-    }
-}
-pipeline {
-    agent any
-    environment {
-        uri_name = credentials('uri_name')
-        uri_pass = credentials('uri_pass')
-        project_details = credentials('project_details')
-    }
-    stages {
-
-        stage('Cloning code from github') {
-            steps {
-                sh 'echo "cloning..."'
-                git url:"https://github.com/moezthedev/flaskurlmini.git", branch: "main"
-            }
-        }
-
-        stage('Building Image via Docker') {
-            steps {
-                sh "echo Building Image via Docker"
-                sh "docker build -t flaskminiurl ."
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Check if container is running
-                script {
-                    def isRunning = sh(script: "docker ps -q -f name=flaskminiurl", returnStatus: true)
-                    if (isRunning == 0) {
-                        echo "Container is running. Stopping it..."
-                        sh "docker stop flaskminiurl"
-                    } else {
-                        echo "Container is not running."
-                    }
-                }
-
-                // Run container from the latest image
-                sh "docker run -p 8000:8000 -d flaskminiurl"
+                sh "docker run -p 8000:8000 -d --name flaskminiurl flaskminiurl"
                 sh 'echo "Deploying..."'
             }
         }
