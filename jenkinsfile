@@ -29,8 +29,12 @@ pipeline {
                     if (activeContainers) {
                         echo "Stopping active container(s): ${activeContainers}"
                         sh "docker stop ${activeContainers}"
-                        echo "Waiting for 15 seconds for previous container to stop"
-                        sleep time: 15, unit: 'SECONDS'
+                        echo "Waiting for 5 seconds for previous container to stop"
+                        sleep time: 5, unit: 'SECONDS'
+                        
+                        // Remove the stopped container
+                        echo "Removing stopped container(s): ${activeContainers}"
+                        sh "docker rm ${activeContainers}"
                     } else {
                         echo "No active containers found."
                     }
