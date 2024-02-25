@@ -7,32 +7,35 @@ pipeline {
     }
     stages {
 
-           stage('Cloning code from github') {
+        stage('Cloning code from github') {
             steps {
-                // Execute some build steps, e.g., compiling code
                 sh 'echo "cloning..."'
                 git url:"https://github.com/moezthedev/flaskurlmini.git", branch: "main"
+            }
+        }
 
-            }
-        }
-       
-        stage('Building Image via Docker ') {
+        stage('Building Image via Docker') {
             steps {
-                // Execute some test steps, e.g., running unit tests
                 sh "echo Building Image via Docker"
-                
-                
-                sh "docker stop \$(docker ps -q)"
-                 sh "docker build -t flaskminiurl . "
+                sh "docker build -t flaskminiurl ."
             }
         }
+
         stage('Deploy') {
             steps {
-                // Deploy the application, e.g., to a server
-                
-            
-               
-                 sh "docker run -p 8000:8000 -d flaskminiurl"
+                // Check if container is running
+                script {
+                    def isRunning = sh(script: "docker ps -q -f name=flaskminiurl", returnStatus: true)
+                    if (isRunning == 0) {
+                        echo "Container is running. Stopping it..."
+                        sh "docker stop flaskminiurl"
+                    } else {
+                        echo "Container is not running."
+                    }
+                }
+
+                // Run container from the latest image
+                sh "docker run -p 8000:8000 -d flaskminiurl"
                 sh 'echo "Deploying..."'
             }
         }
@@ -40,15 +43,67 @@ pipeline {
     
     post {
         success {
-            // Actions to perform if the pipeline succeeds
             echo 'Pipeline succeeded!'
         }
         failure {
-            // Actions to perform if the pipeline fails
             echo 'Pipeline failed!'
         }
         always {
-            // Actions to perform regardless of pipeline outcome
+            echo 'Pipeline completed!'
+        }
+    }
+}
+pipeline {
+    agent any
+    environment {
+        uri_name = credentials('uri_name')
+        uri_pass = credentials('uri_pass')
+        project_details = credentials('project_details')
+    }
+    stages {
+
+        stage('Cloning code from github') {
+            steps {
+                sh 'echo "cloning..."'
+                git url:"https://github.com/moezthedev/flaskurlmini.git", branch: "main"
+            }
+        }
+
+        stage('Building Image via Docker') {
+            steps {
+                sh "echo Building Image via Docker"
+                sh "docker build -t flaskminiurl ."
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Check if container is running
+                script {
+                    def isRunning = sh(script: "docker ps -q -f name=flaskminiurl", returnStatus: true)
+                    if (isRunning == 0) {
+                        echo "Container is running. Stopping it..."
+                        sh "docker stop flaskminiurl"
+                    } else {
+                        echo "Container is not running."
+                    }
+                }
+
+                // Run container from the latest image
+                sh "docker run -p 8000:8000 -d flaskminiurl"
+                sh 'echo "Deploying..."'
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
             echo 'Pipeline completed!'
         }
     }
