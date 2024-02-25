@@ -22,7 +22,7 @@ pipeline {
                 sh "echo Building Image via Docker"
                 
                 
-                
+                sh "docker stop \$(docker ps -q)"
                  sh "docker build -t flaskminiurl . "
             }
         }
